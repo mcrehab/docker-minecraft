@@ -15,6 +15,7 @@ RUN     yum -y install epel-release
 RUN     yum groups mark convert
 RUN     yum --enablerepo=epel -y -x gnome-keyring --skip-broken groups install "Xfce"
 RUN     yum -y install xrdp
+RUN     yum -y install wget
 RUN     yum -y clean all
 
 
@@ -27,3 +28,10 @@ RUN     rm /etc/xdg/autostart/at-spi-dbus-bus.desktop \
            /etc/xdg/autostart/xfce4-power-manager.desktop \
            /etc/xdg/autostart/xfsettingsd.desktop \
            /etc/xdg/autostart/xfce-polkit.desktop
+
+
+#
+# Add wget with slected minecraft jar ex ; https://launcher.mojang.com/download/Minecraft.tar.gz (Minecraft 1.16.5)
+#
+WORKDIR /build
+RUN wget https://launcher.mojang.com/download/Minecraft.tar.gz
