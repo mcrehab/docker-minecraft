@@ -35,3 +35,4 @@ RUN     rm -f /etc/xdg/autostart/at-spi-dbus-bus.desktop \
 #
 WORKDIR /build
 RUN wget https://launcher.mojang.com/download/Minecraft.tar.gz
+RUN tar -xvzf Minecraft.tar.gz
