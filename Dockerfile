@@ -21,9 +21,9 @@ RUN     yum -y clean all
 #
 # Remove default settings for when xfce desktop is started.
 #
-RUN     rm /etc/xdg/autostart/at-spi-dbus-bus.desktop \
-           /etc/xdg/autostart/caribou-autostart.desktop \
-           /etc/xdg/autostart/xscreensaver.desktop \
-           /etc/xdg/autostart/xfce4-power-manager.desktop \
-           /etc/xdg/autostart/xfsettingsd.desktop \
-           /etc/xdg/autostart/xfce-polkit.desktop
+RUN     rm -f /etc/xdg/autostart/at-spi-dbus-bus.desktop \
+              /etc/xdg/autostart/caribou-autostart.desktop \
+              /etc/xdg/autostart/xscreensaver.desktop \
+              /etc/xdg/autostart/xfce4-power-manager.desktop \
+              /etc/xdg/autostart/xfsettingsd.desktop \
+              /etc/xdg/autostart/xfce-polkit.desktop
