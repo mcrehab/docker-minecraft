@@ -35,3 +35,19 @@ RUN     rm -f /etc/xdg/autostart/at-spi-dbus-bus.desktop \
 #
 WORKDIR /build
 RUN wget https://launcher.mojang.com/download/Minecraft.tar.gz
+
+#
+# Create the default user..
+#
+RUN adduser minecraft
+RUN echo minecraft:minecraft | chpasswd
+RUN echo "xfce4-session" > /home/minecraft/.xsession
+RUN echo "exec /usr/bin/startxfce4" > /home/minecraft/.Xclients
+RUN chmod +x /home/minecraft/.Xclients
+
+#
+# Run this when the docker container is started..
+#
+WORKDIR /
+COPY entrypoint.sh .
+ENTRYPOINT ["./entrypoint.sh"]
