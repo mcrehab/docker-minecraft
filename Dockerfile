@@ -51,4 +51,5 @@ RUN chmod +x /home/minecraft/.Xclients
 #
 WORKDIR /
 COPY entrypoint.sh .
+RUN chmod +x entrypoint.sh
 ENTRYPOINT ["./entrypoint.sh"]
