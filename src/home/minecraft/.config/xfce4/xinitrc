@@ -1,0 +1,5 @@
+#!/bin/sh
+
+. /etc/xdg/xfce4/xinitrc
+
+/usr/local/bin/minecraft-launcher

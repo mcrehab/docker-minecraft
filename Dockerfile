@@ -1,23 +1,30 @@
 #
 # Inherit from the official centos docker image.
 #
-FROM    centos:7
+FROM    centos:8
 
 #
 # Copy the files in the local "src" directory in to the image.
 #
 COPY    src/etc /etc
+COPY    src/bin /bin
+COPY    entrypoint.sh .
 
 #
 # Install packages in the centos image.
 #
 RUN     yum -y install epel-release
-RUN     yum groups mark convert
+RUN     yum --enablerepo=epel -y -x gnome-keyring --skip-broken groups install "Development Tools"
 RUN     yum --enablerepo=epel -y -x gnome-keyring --skip-broken groups install "Xfce"
-RUN     yum -y install xrdp
-RUN     yum -y install wget
-RUN     yum -y clean all
+RUN     yum -y install xrdp \
+                       wget \
+                       java \
+                       bzip2 \
+                       python3 \
+                       tigervnc-server
 
+RUN     yum -y clean all
+RUN     pip3 install numpy
 
 #
 # Remove default settings for when xfce desktop is started.
@@ -36,6 +43,7 @@ RUN     rm -f /etc/xdg/autostart/at-spi-dbus-bus.desktop \
 WORKDIR /build
 RUN wget https://launcher.mojang.com/download/Minecraft.tar.gz
 RUN tar -xvzf Minecraft.tar.gz
+RUN cp minecraft-launcher/minecraft-launcher /usr/local/bin
 
 #
 # Create the default user..
@@ -46,10 +54,20 @@ RUN echo "xfce4-session" > /home/minecraft/.xsession
 RUN echo "exec /usr/bin/startxfce4" > /home/minecraft/.Xclients
 RUN chmod +x /home/minecraft/.Xclients
 
+COPY src/home/ /home
+RUN chown -R minecraft /home/minecraft
+
+WORKDIR /home/minecraft/world
+
+RUN wget https://launcher.mojang.com/v1/objects/1b557e7b033b583cd9f66746b7a9ab1ec1673ced/server.jar
+
+WORKDIR /home/minecraft/novnc
+RUN wget https://github.com/novnc/noVNC/archive/refs/tags/v1.2.0.tar.gz && \
+    tar -xvzf v1.2.0.tar.gz && \
+    rm -rf v1.2.0.tar.gz
 #
+
 # Run this when the docker container is started..
 #
-WORKDIR /
-COPY entrypoint.sh .
-RUN chmod +x entrypoint.sh
-ENTRYPOINT ["./entrypoint.sh"]
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
